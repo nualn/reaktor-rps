@@ -1,8 +1,6 @@
-export enum Hand {
-  Rock = 'ROCK',
-  Paper = 'PAPER',
-  Scissors = 'SCISSORS'
-}
+export type Hand = 'ROCK' | 'PAPER' | 'SCISSORS';
+
+export type Outcome = 'WIN' | 'LOSE' | 'TIE';
 
 export interface PlayerResult {
   name: string;
@@ -24,10 +22,18 @@ export interface HistoryPage {
 
 export interface PlayerGames {
   name: string;
-  games: Array<GameResult>;
+  games: Array<FormattedGameResult>;
 }
 
 export interface PlayerList {
   players: Array<string>;
+}
+
+export interface FormattedGameResult {
+  player: PlayerResult;
+  opponent: PlayerResult;
+  outcome: Outcome;
+  t: number;
+  gameId: string;
 }
 

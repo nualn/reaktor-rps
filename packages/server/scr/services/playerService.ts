@@ -1,6 +1,7 @@
 import { PlayerGames, PlayerList } from "../types";
 import fetchJSON from "../utils/fetchTools";
 import * as config from '../utils/config';
+import gameHistoryFormatter from "../utils/formatTools";
 
 const getAllPlayers = async (): Promise<PlayerList> => {
   const players: Array<string> = [];
@@ -20,10 +21,10 @@ const getAllPlayers = async (): Promise<PlayerList> => {
 
 const getPlayerGames = async (name: string): Promise<PlayerGames> => {
   const { data } = await fetchJSON(config.API_HISTORY_URI);
-  const games = data.filter(game => game.playerA.name === name || game.playerB.name === name);
+  const formattedGames = gameHistoryFormatter(data).filter(game => game.player.name === name);
   return {
-    name,
-    games
+    name: name,
+    games: formattedGames
   };
 };
 
