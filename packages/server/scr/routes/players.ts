@@ -1,13 +1,20 @@
 import express from 'express';
+import playerService from '../services/playerService';
 
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send('fetching all players');
+  void playerService.getAllPlayers().then(players => {
+    res.json(players);
+  });
 });
 
 router.get('/:name', (req, res) => {
-  res.send(`Fetcing info for player with name ${req.params.name}`);
+  void playerService
+    .getPlayerGames(req.params.name)
+    .then(playerGames => {
+      res.json(playerGames);
+    });
 });
 
 export default router;
