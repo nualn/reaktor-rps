@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
+    "dev": "ts-node-dev ./scr/index.ts",
+    "lint": "eslint --ext .ts .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +18,17 @@
   "bugs": {
     "url": "https://github.com/nualn/reaktor-rps/issues"
   },
-  "homepage": "https://github.com/nualn/reaktor-rps#readme"
+  "homepage": "https://github.com/nualn/reaktor-rps#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.7.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "dotenv": "^14.1.0",
+    "express": "^4.17.2"
+  }
 }
