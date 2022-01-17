@@ -1,0 +1,24 @@
+{
+  "name": "reaktor-rps",
+  "private": true,
+  "version": "1.0.0",
+  "description": "My solution to Reaktor rps assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nualn/reaktor-rps.git"
+  },
+  "author": "Nuutti Nikkola",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nualn/reaktor-rps/issues"
+  },
+  "homepage": "https://github.com/nualn/reaktor-rps#readme",
+  "workspaces": [
+    "packages\\client",
+    "packages\\server"
+  ]
+}
