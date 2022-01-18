@@ -1,4 +1,4 @@
-import { PlayerGames, PlayerList } from "../types";
+import { PlayerList } from "../types";
 import fetchJSON from "../utils/fetchTools";
 import * as config from '../utils/config';
 import gameHistoryFormatter from "../utils/formatTools";
@@ -19,11 +19,37 @@ const getAllPlayers = async (): Promise<PlayerList> => {
   return { players };
 };
 
-const getPlayerGames = async (name: string): Promise<PlayerGames> => {
+const getPlayerGames = async (name: string) => {
   const { data } = await fetchJSON(config.API_HISTORY_URI);
   const formattedGames = gameHistoryFormatter(data).filter(game => game.player.name === name);
+  const stats = {
+    wins: 0,
+    totalMatches: 0,
+    rockPlayed: 0,
+    paperPlayed: 0,
+    scissorsPlayed: 0
+  };
+  for (const game of formattedGames) {
+    stats.totalMatches++;
+    if (game.outcome === 'WIN') {
+      stats.wins++;
+    }
+    switch (game.player.played) {
+      case 'ROCK':
+        stats.rockPlayed++;
+        break;
+      case 'PAPER':
+        stats.paperPlayed++;
+        break;
+      case 'SCISSORS':
+        stats.scissorsPlayed++;
+        break;
+    }
+  }
+
   return {
     name: name,
+    stats: stats,
     games: formattedGames
   };
 };
