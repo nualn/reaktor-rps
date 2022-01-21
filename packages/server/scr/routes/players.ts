@@ -11,7 +11,7 @@ router.get('/', (_req, res) => {
 
 router.get('/:name', (req, res) => {
   void playerService
-    .getPlayerGames(req.params.name)
+    .getAllPlayerGames(req.params.name)
     .then(playerGames => {
       res.json(playerGames);
     });

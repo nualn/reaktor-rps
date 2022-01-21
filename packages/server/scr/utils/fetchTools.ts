@@ -7,4 +7,6 @@ const fetchJSON = async (url: string): Promise<HistoryPage> => {
   return data;
 };
 
-export default fetchJSON;
+export {
+  fetchJSON
+};

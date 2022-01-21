@@ -1,4 +1,4 @@
-import { FormattedGameResult, GameResult, Hand, Outcome } from "../types";
+import { FormattedGameResult, GameResult, Hand, Outcome, PlayerGames } from "../types";
 
 const outcomes: Record<Hand, Record<Hand, Outcome>> = {
   ROCK: {
@@ -46,4 +46,51 @@ const gameHistoryFormatter = (gameResults: Array<GameResult>): Array<FormattedGa
   return gameResults.flatMap(gameResult => gameResultFormatter(gameResult));
 };
 
-export default gameHistoryFormatter;
+const sortGamesByPlayer = (gamesArray: Array<FormattedGameResult>, initialSortedArray: Array<PlayerGames> = []) => {
+    gamesArray.forEach(game => {
+    const matchingPlayerGamesObject = initialSortedArray.find(playerGamesObj => playerGamesObj.name === game.player.name);
+    if (matchingPlayerGamesObject) {
+      matchingPlayerGamesObject.games = [...matchingPlayerGamesObject.games, game];
+      return;
+    }
+    initialSortedArray.push({ name: game.player.name, games: [game]});
+  });
+
+  return initialSortedArray;
+};
+
+const getStats = (formattedGamesList: Array<FormattedGameResult>) => {
+  const stats = {
+    wins: 0,
+    totalMatches: 0,
+    rockPlayed: 0,
+    paperPlayed: 0,
+    scissorsPlayed: 0
+  };
+
+  for (const game of formattedGamesList) {
+    stats.totalMatches++;
+    if (game.outcome === 'WIN') {
+      stats.wins++;
+    }
+    switch (game.player.played) {
+      case 'ROCK':
+        stats.rockPlayed++;
+        break;
+      case 'PAPER':
+        stats.paperPlayed++;
+        break;
+      case 'SCISSORS':
+        stats.scissorsPlayed++;
+        break;
+    }
+  }
+
+  return stats;
+};
+
+export { 
+  gameHistoryFormatter,
+  sortGamesByPlayer,
+  getStats
+};
