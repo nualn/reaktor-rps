@@ -2,10 +2,18 @@
   "name": "reaktor-rps",
   "private": true,
   "version": "1.0.0",
+  "engines": {
+    "node": "16.13.1",
+    "npm": "8.1.2"
+  },
   "description": "My solution to Reaktor rps assignment",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npm run build:server",
+    "build:server": "npm run tsc  --workspace=server",
+    "start:server": "npm start  --workspace=server",
+    "dev:server": "npm run dev  --workspace=server"
   },
   "repository": {
     "type": "git",
@@ -18,8 +26,8 @@
   },
   "homepage": "https://github.com/nualn/reaktor-rps#readme",
   "workspaces": [
-    "packages\\client",
-    "packages\\server"
+    "packages/client",
+    "packages/server"
   ],
   "dependencies": {
     "@types/flat-cache": "^2.0.0",
