@@ -37,6 +37,7 @@ const LiveGames = () => {
   }, []);
 
   const games = useSelector(state => state);
+
   return (
     <Container sx={{ py: 6 }} maxWidth="md">
       <Typography
