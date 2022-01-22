@@ -5,7 +5,7 @@ import LiveGames from './components/LiveGames';
 
 const App = () => {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
         <LiveGames/>
       </Box>

@@ -2,6 +2,28 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { gameEvent } from '../reducers/gameReducer';
 
+import { rpsIcon } from '../utils/liveGameUtils';
+import { Card, Grid, Container, Typography, CardContent } from '@mui/material';
+import Zoom from '@mui/material/Zoom';
+
+const Game = ({ game }) => {
+  return (
+    <Grid item xs={12} sm={6} md={4}>
+      <Zoom in>
+        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <CardContent align='center'>
+            <Typography>{game.playerA.name}</Typography>
+            {rpsIcon(game.playerA.played)}
+            <Typography>vs.</Typography>
+            {rpsIcon(game.playerB.played)}
+            <Typography>{game.playerB.name}</Typography>
+          </CardContent>
+        </Card>
+      </Zoom>
+    </Grid>
+  );
+};
+
 const LiveGames = () => {
   const dispatch = useDispatch();
 
@@ -14,12 +36,22 @@ const LiveGames = () => {
     };
   }, []);
 
+  const games = useSelector(state => state);
   return (
-    <div>
-      <ul>
-        {useSelector(state => state).map(game => <li key={game.gameId}>{JSON.stringify(game)}</li>)}
-      </ul>
-    </div>
+    <Container sx={{ py: 6 }} maxWidth="md">
+      <Typography
+        component="h1"
+        variant="h2"
+        align="center"
+        color="text.primary"
+        gutterBottom
+      >
+        Ongoing games
+      </Typography>
+      <Grid container spacing={4}>
+        {games.map(game => <Game key={game.gameId} game={game} />)}
+      </Grid>
+    </Container>
   );
 };
 
