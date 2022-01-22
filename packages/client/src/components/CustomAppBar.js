@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -25,12 +25,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const CustomAppBar = () => {
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
+const CustomAppBar = ({ open, toggleDrawer }) => {
   return <AppBar position="absolute" open={open}>
     <Toolbar>
       <Typography
