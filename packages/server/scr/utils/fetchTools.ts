@@ -1,12 +1,24 @@
 import axios from 'axios';
 import * as config from './config';
-import { HistoryPage } from '../types';
+import { GameResult, HistoryPage } from '../types';
 
 const fetchJSON = async (url: string): Promise<HistoryPage> => {
+  console.log('fetching', url);
   const { data }: { data: HistoryPage } = await axios.get(`${config.API_BASE_URL}${url}`);
   return data;
 };
 
+const fetchGamesFromTo = async (fromCursor: string, toCursor: string): Promise<Array<GameResult>> => {
+  if (fromCursor && fromCursor !== toCursor) {
+    const { cursor, data } = await fetchJSON(fromCursor);
+    const cumulativeGames = await fetchGamesFromTo(cursor, toCursor);
+    cumulativeGames.push(...data);
+    return cumulativeGames;
+  }
+  return [];
+};
+
 export {
+  fetchGamesFromTo,
   fetchJSON
 };

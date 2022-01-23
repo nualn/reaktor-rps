@@ -1,43 +1,5 @@
-import flatCache from 'flat-cache';
-import { FormattedGameResult } from '../types';
-
-const playerCache = flatCache.load('cachePlayerGames');
-const cursorCache = flatCache.load('cacheMetadata');
-
-const storeGames = (gamesArray: Array<FormattedGameResult>) => {
-  gamesArray.forEach(game => {
-    const storedGames = getPlayerGames(game.player.name);
-    if (storedGames) {
-      playerCache.setKey(game.player.name, [...storedGames, game]);
-      return;
-    }
-    playerCache.setKey(game.player.name, [game]);
-  });
-};
-
-const getPlayerGames = (name: string) => {
-  return playerCache.getKey(name) as Array<FormattedGameResult> | undefined;
-};
-
-const setLatestCursor = (cursor: string) => {
-  cursorCache.setKey('latestCursor', cursor);
-};
-
-const getLatestCursor = () => {
-  return cursorCache.getKey('latestCursor') as string | undefined;
-};
-
-const getPlayers = () => {
-  return Object.keys(playerCache.all());
-};
-
-const save = () => {
-  playerCache.save(true);
-  cursorCache.save(true);
-};
-
-/*import { MongoClient } from 'mongodb';
-import { FormattedGameResult, PlayerGames } from '../types';
+import { MongoClient } from 'mongodb';
+import { PlayerGames } from '../types';
 import * as config from '../utils/config';
 
 const client: MongoClient = new MongoClient(config.MONGODB_URI);
@@ -47,7 +9,7 @@ const setLatestCursor = async (cursor: string) => {
     await client.connect();
 
     const metaCollection = client.db('rpsdb').collection('metadata');
-    await metaCollection.replaceOne({}, { lastCursor: cursor }, { upsert: true });
+    await metaCollection.replaceOne({}, { latestCursor: cursor }, { upsert: true });
 
   } finally {
     await client.close();
@@ -58,10 +20,10 @@ const getLatestCursor = async () => {
   try {
     await client.connect();
 
-    const metaCollection = client.db('rpsdb').collection<{ lastCursor: string }>('metadata');
+    const metaCollection = client.db('rpsdb').collection<{ latestCursor: string }>('metadata');
     const result = (await metaCollection.findOne({}));
 
-    return result && result.lastCursor;
+    return result && result.latestCursor;
   } finally {
     await client.close();
   }
@@ -73,7 +35,7 @@ const getPlayers = async () => {
     const playerCollection = client.db('rpsdb').collection<PlayerGames>('players');
 
     const players = await playerCollection.find({})
-      .project<PlayerGames>({ player: 1 })
+      .project<PlayerGames>({ name: 1 })
       .map<string>(x => x.name)
       .toArray();
     
@@ -109,22 +71,19 @@ const setPlayerGames = async (playerGamesObj: PlayerGames) => {
   }
 };
 
-const storeGames = async (gamesArray: Array<FormattedGameResult>) => {
-  for (const game of gamesArray) {
-    const storedPlayerGames = await getPlayerGames(game.player.name);
-    if (storedPlayerGames) {
+const storeGames = async (playerGamesArray: Array<PlayerGames>) => {
+  for (const playerGamesObj of playerGamesArray) {
+    const cachedPlayerGamesObj = await getPlayerGames(playerGamesObj.name);
+    if (cachedPlayerGamesObj) {
       await setPlayerGames({ 
-        name: game.player.name, 
-        games: [...storedPlayerGames.games, game]
+        name: playerGamesObj.name, 
+        games: [...cachedPlayerGamesObj.games, ...playerGamesObj.games]
       });
-      return;
+    } else {
+      await setPlayerGames(playerGamesObj);
     }
-    await setPlayerGames({ 
-      name: game.player.name, 
-      games: [game]
-    });
   }
-};*/
+};
 
 export {
   storeGames,
@@ -132,5 +91,4 @@ export {
   getLatestCursor,
   getPlayerGames,
   getPlayers,
-  save
 };
