@@ -37,3 +37,11 @@ export interface FormattedGameResult {
   gameId: string;
 }
 
+export interface IntermediateStats {
+  wins: number;
+  totalMatches: number;
+  rockPlayed: number;
+  paperPlayed: number;
+  scissorsPlayed: number;
+}
+

@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+import PlayerGames from './PlayerGames';
+
 const useStyles = makeStyles({
   root: {
     width: 'auto',
@@ -36,7 +38,6 @@ const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
       </TableRow>
       {isExpanded && (
         <TableRow>
-          <TableCell padding="checkbox" />
           {expandComponent}
         </TableRow>
       )}
@@ -59,7 +60,11 @@ export default function SimpleTable({ players }) {
           {players.map(name => (
             <ExpandableTableRow
               key={name}
-              expandComponent={<TableCell colSpan="5">Hidden {name}</TableCell>}
+              expandComponent={
+                <TableCell colSpan="5">
+                  <PlayerGames name={name}/>
+                </TableCell>
+              }
             >
               <TableCell component="th" scope="row">
                 {name}

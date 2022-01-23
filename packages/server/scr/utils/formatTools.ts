@@ -1,4 +1,4 @@
-import { FormattedGameResult, GameResult, Hand, Outcome, PlayerGames } from "../types";
+import { FormattedGameResult, GameResult, Hand, IntermediateStats, Outcome, PlayerGames } from "../types";
 
 const outcomes: Record<Hand, Record<Hand, Outcome>> = {
   ROCK: {
@@ -59,8 +59,21 @@ const sortGamesByPlayer = (gamesArray: Array<FormattedGameResult>, initialSorted
   return initialSortedArray;
 };
 
+const findMostPlayed = (intermediateStats: IntermediateStats) => {
+  if (intermediateStats.rockPlayed >= intermediateStats.paperPlayed && intermediateStats.rockPlayed >= intermediateStats.scissorsPlayed) {
+    return 'ROCK';
+  }
+  if (intermediateStats.paperPlayed > intermediateStats.rockPlayed && intermediateStats.paperPlayed >= intermediateStats.scissorsPlayed) {
+    return 'PAPER';
+  }
+  if (intermediateStats.scissorsPlayed > intermediateStats.rockPlayed && intermediateStats.scissorsPlayed > intermediateStats.paperPlayed) {
+    return 'SCISSORS';
+  }
+  return '';
+};
+
 const getStats = (formattedGamesList: Array<FormattedGameResult>) => {
-  const stats = {
+  const intermediateStats: IntermediateStats = {
     wins: 0,
     totalMatches: 0,
     rockPlayed: 0,
@@ -69,22 +82,28 @@ const getStats = (formattedGamesList: Array<FormattedGameResult>) => {
   };
 
   for (const game of formattedGamesList) {
-    stats.totalMatches++;
+    intermediateStats.totalMatches++;
     if (game.outcome === 'WIN') {
-      stats.wins++;
+      intermediateStats.wins++;
     }
     switch (game.player.played) {
       case 'ROCK':
-        stats.rockPlayed++;
+        intermediateStats.rockPlayed++;
         break;
       case 'PAPER':
-        stats.paperPlayed++;
+        intermediateStats.paperPlayed++;
         break;
       case 'SCISSORS':
-        stats.scissorsPlayed++;
+        intermediateStats.scissorsPlayed++;
         break;
     }
   }
+
+  const stats = { 
+    totalMatches: intermediateStats.totalMatches,
+    winRate: intermediateStats.wins / intermediateStats.totalMatches,
+    mostPlayed: findMostPlayed(intermediateStats)
+  };
 
   return stats;
 };

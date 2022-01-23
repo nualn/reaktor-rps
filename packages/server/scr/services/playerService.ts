@@ -17,12 +17,13 @@ const updateCacheFrom = async (cursor: string) => {
 };
 
 const getAllPlayers = async (): Promise<PlayerList> => {
-  const { cursor, data } = await fetchJSON(config.API_HISTORY_URI);
+  const { /*cursor,*/ data } = await fetchJSON(config.API_HISTORY_URI);
   const newGamesFormatted = gameHistoryFormatter(data);
   
   const fetchedPlayers = newGamesFormatted.map(game => game.player.name);
-  await updateCacheFrom(cursor);
-  cache.setLatestCursor(cursor);
+  
+  await updateCacheFrom('/rps/history?cursor=nKNA7rLW2MCM');
+  cache.setLatestCursor('/rps/history?cursor=nKNA7rLW2MCM');
 
   const cachedPlayers = cache.getPlayers();
   
@@ -32,13 +33,13 @@ const getAllPlayers = async (): Promise<PlayerList> => {
 };
 
 const getAllPlayerGames = async (name: string) => {
-  const { cursor, data } = await fetchJSON(config.API_HISTORY_URI);
+  const { /*cursor,*/ data } = await fetchJSON(config.API_HISTORY_URI);
   const newGamesFormatted = gameHistoryFormatter(data);
   const fetchedPlayerGames = sortGamesByPlayer(newGamesFormatted)
     .find(playerGamesObj => playerGamesObj.name === name);
 
-  await updateCacheFrom(cursor);
-  cache.setLatestCursor(cursor);
+  await updateCacheFrom('/rps/history?cursor=nKNA7rLW2MCM');
+  cache.setLatestCursor('/rps/history?cursor=nKNA7rLW2MCM');
 
   const cachedGames = cache.getPlayerGames(name);
 

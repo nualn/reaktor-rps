@@ -21,5 +21,12 @@ process
     cache.save();
     console.log('Cache saved');
     process.exit();
+  }).on('SIGINT', () => {
+    console.time('saving');
+    console.log('SIGINT');
+    cache.save();
+    console.log('Cache saved');
+    console.timeEnd('saving');
+    process.exit();
   });
 

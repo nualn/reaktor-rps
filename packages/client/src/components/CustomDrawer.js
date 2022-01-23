@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { drawerWidth } from '../utils/config';
-import { Toolbar, IconButton, Paper, InputBase } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Toolbar, IconButton } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandablePlayerTable from './ExpandablePlayerTable';
 import playerService from '../services/players';
@@ -56,17 +55,6 @@ const CustomDrawer = ({ open, toggleDrawer }) => {
         <IconButton onClick={toggleDrawer} sx={{ marginRight: 'auto' }}>
           <ChevronRightIcon />
         </IconButton>
-        <Paper
-          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 435, height: 40, borderRadius: 10 }}
-        >
-          <SearchIcon sx={{ marginLeft: 1 }} />
-          <InputBase
-            fullWidth
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Players"
-            inputProps={{ 'aria-label': 'search players' }}
-          />
-        </Paper>
       </Toolbar>
       {open ? <ExpandablePlayerTable players={players}/> : null}
     </Drawer>
