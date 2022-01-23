@@ -1,10 +1,13 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { drawerWidth } from '../utils/config';
 import { Toolbar, IconButton, Paper, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandablePlayerTable from './ExpandablePlayerTable';
+import playerService from '../services/players';
+
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -33,6 +36,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const CustomDrawer = ({ open, toggleDrawer }) => {
+  const [players, setPlayers] = useState([]);
+
+  useEffect(async () => {
+    const fetchedPlayersObj = await playerService.getPlayers();
+    setPlayers(fetchedPlayersObj.players);
+  }, [open]);
+
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
@@ -58,6 +68,7 @@ const CustomDrawer = ({ open, toggleDrawer }) => {
           />
         </Paper>
       </Toolbar>
+      {open ? <ExpandablePlayerTable players={players}/> : null}
     </Drawer>
   );
 };

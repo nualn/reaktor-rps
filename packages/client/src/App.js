@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import LiveGames from './components/LiveGames';
 import CustomAppBar from './components/CustomAppBar';
@@ -12,12 +11,14 @@ const App = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', maxHeight: '100vh' }}>
       <CustomAppBar open={open} toggleDrawer={toggleDrawer}/>
       <LiveGames/>
       <CustomDrawer open={open} toggleDrawer={toggleDrawer}/>
     </Box>
   );
 };
+
+
 
 export default App;
