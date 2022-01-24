@@ -1,10 +1,10 @@
 import express from 'express';
 import playerRouter from './routes/players';
-//import cors from 'cors';
 
 const app = express();
+
+app.use(express.static(`${__dirname}/../../client/build`));
 app.use(express.json());
-//app.use(cors);
 
 const PORT = process.env.PORT || 3000;
 
