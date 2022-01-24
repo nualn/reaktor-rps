@@ -5,43 +5,43 @@ import { gameHistoryFormatter, getStats, sortGamesByPlayer } from "../utils/form
 import { storeGames } from "../cache/cache";
 import * as cache from '../cache/cache';
 
-const updateCacheFrom = async (cursor: string) => {
+const getUncachedGamesAndUpdateCache = async () => {
+  const { cursor, data } = await fetchJSON(config.API_HISTORY_URI);
+  const formattedData = gameHistoryFormatter(data);
+
   const latestCursor = await cache.getLatestCursor();
   const gamesArray = await fetchGamesFromTo(cursor, latestCursor || '');  
   const formattedGamesArray = gameHistoryFormatter(gamesArray);
   const playerGamesArray = sortGamesByPlayer(formattedGamesArray);
-  await storeGames(playerGamesArray);
-  return;
+
+  await cache.setLatestCursor(cursor);
+  void storeGames(playerGamesArray);
+
+  const allFetchedGames = sortGamesByPlayer(formattedData, playerGamesArray);
+  return allFetchedGames;
 };
 
-const getAllPlayers = async (): Promise<PlayerList> => {
-  const { cursor, data } = await fetchJSON(config.API_HISTORY_URI);
-  const newGamesFormatted = gameHistoryFormatter(data);
-  
-  const fetchedPlayers = newGamesFormatted.map(game => game.player.name);
-  
-  await updateCacheFrom(cursor);
-  await cache.setLatestCursor(cursor);
-
+const getAllPlayers = async (): Promise<PlayerList> => {  
+  const fetchedPlayerGames = await getUncachedGamesAndUpdateCache();
+  const fetchedPlayers = fetchedPlayerGames.map(playerGame => playerGame.name);
   const cachedPlayers = await cache.getPlayers();
-  
   const players = [...new Set([...fetchedPlayers, ...cachedPlayers])];
   
   return { players };
 };
 
 const getAllPlayerGames = async (name: string) => {
-  const { cursor, data } = await fetchJSON(config.API_HISTORY_URI);
-  const newGamesFormatted = gameHistoryFormatter(data);
-  const fetchedPlayerGames = sortGamesByPlayer(newGamesFormatted)
-    .find(playerGamesObj => playerGamesObj.name === name);
-
-  await updateCacheFrom(cursor);
-  await cache.setLatestCursor(cursor);
+  
+  const fetchedPlayerGames = (await getUncachedGamesAndUpdateCache())
+    .find(playerGame => playerGame.name === name);
 
   const cachedGames = await cache.getPlayerGames(name);
 
-  const gamesArray = [...cachedGames && cachedGames.games || [], ...fetchedPlayerGames && fetchedPlayerGames.games || []];
+  const gamesArray = [
+    ...cachedGames && cachedGames.games || [],
+   ...fetchedPlayerGames && fetchedPlayerGames.games || []
+  ];
+
   const stats =  getStats(gamesArray);
 
   return {

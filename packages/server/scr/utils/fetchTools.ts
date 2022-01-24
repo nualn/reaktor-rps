@@ -3,7 +3,6 @@ import * as config from './config';
 import { GameResult, HistoryPage } from '../types';
 
 const fetchJSON = async (url: string): Promise<HistoryPage> => {
-  console.log('fetching', url);
   const { data }: { data: HistoryPage } = await axios.get(`${config.API_BASE_URL}${url}`);
   return data;
 };
