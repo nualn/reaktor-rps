@@ -5,11 +5,13 @@ My solution to Reaktor's [2022 summer developer assignment](https://www.reaktor.
 ## Running
 ### Online
 
-The application will be up on Heroku soon.
+The application is up on [Heroku](https://reaktor-rps-2022.herokuapp.com/).
 
 ### Locally
 
-Clone the repository and run `npm install`to get started. To get the mongoDB cache working, add a .env file to the server directory with `MONGODB_URI=<your uri>`. Some useful scripts:
+Clone the repository and run `npm install`to get started. To get the mongoDB cache working, add a .env file to the server directory with `MONGODB_URI=<your monogdb uri>`. It is also recommended to create an index on the `players` collection. 
+
+Some useful scripts:
 
 - `npm run postinstall`: build client and server
 - `npm run build:server`: build server
