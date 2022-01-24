@@ -1,15 +1,15 @@
 # reaktor-rps
 
-My solution to Reaktor's [2022 summer developer assignment](https://www.reaktor.com/assignment-2022-developers/). Powered by TypeScript and MERN.
+My solution to Reaktor's [2022 summer developer assignment](https://www.reaktor.com/assignment-2022-developers/). Powered by TypeScript, MERN and MaterialUI.
 
 ## Running
 ### Online
 
-The application will be on Heroku soon.
+The application will be up on Heroku soon.
 
 ### Locally
 
-Clone the repository and run `npm install`to get started. Some useful scripts:
+Clone the repository and run `npm install`to get started. To get the mongoDB cache working, add a .env file to the server directory with `MONGODB_URI=<your uri>`. Some useful scripts:
 
 - `npm run postinstall`: build client and server
 - `npm run build:server`: build server
