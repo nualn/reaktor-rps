@@ -47,16 +47,18 @@ const gameHistoryFormatter = (gameResults: Array<GameResult>): Array<FormattedGa
 };
 
 const sortGamesByPlayer = (gamesArray: Array<FormattedGameResult>, initialSortedArray: Array<PlayerGames> = []) => {
-    gamesArray.forEach(game => {
-    const matchingPlayerGamesObject = initialSortedArray.find(playerGamesObj => playerGamesObj.name === game.player.name);
+  const copyOfInitialArray = initialSortedArray.map(playerGamesObj => ({ name: playerGamesObj.name, games: [...playerGamesObj.games] }));
+
+  gamesArray.forEach(game => {
+    const matchingPlayerGamesObject = copyOfInitialArray.find(playerGamesObj => playerGamesObj.name === game.player.name);
     if (matchingPlayerGamesObject) {
-      matchingPlayerGamesObject.games = [...matchingPlayerGamesObject.games, game];
+      matchingPlayerGamesObject.games.push(game);
       return;
     }
-    initialSortedArray.push({ name: game.player.name, games: [game]});
+    copyOfInitialArray.push({ name: game.player.name, games: [game]});
   });
 
-  return initialSortedArray;
+  return copyOfInitialArray;
 };
 
 const findMostPlayed = (intermediateStats: IntermediateStats) => {
