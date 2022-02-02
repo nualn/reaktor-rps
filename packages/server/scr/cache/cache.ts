@@ -73,8 +73,6 @@ const setPlayerGames = async (playerGamesObj: PlayerGames) => {
 
 const storeGames = async (playerGamesArray: Array<PlayerGames>) => {
   for (const playerGamesObj of playerGamesArray) {
-    console.time('Add playerGames');
-    console.log('storing', playerGamesObj.games.length, 'games for', playerGamesObj.name);
     const cachedPlayerGamesObj = await getPlayerGames(playerGamesObj.name);
     if (cachedPlayerGamesObj) {
       await setPlayerGames({ 
@@ -84,7 +82,6 @@ const storeGames = async (playerGamesArray: Array<PlayerGames>) => {
     } else {
       await setPlayerGames(playerGamesObj);
     }
-    console.timeEnd('Add playerGames');
   }
 };
 
