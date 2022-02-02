@@ -1,4 +1,7 @@
-const gameReducer = (state = [], action) => {
+import { GameEvent, GameEventAction } from "../../../../common/types";
+import { Dispatch } from "redux";
+
+const gameReducer = (state: GameEvent[] = [], action: GameEventAction) => {
   switch(action.type) {
     case 'GAME_BEGIN': {
       return [...state, action];
@@ -19,8 +22,8 @@ const gameReducer = (state = [], action) => {
   }
 };
 
-export const gameEvent = data => {
-  return async dispatch => {
+export const gameEvent = (data: GameEventAction) => {
+  return (dispatch: Dispatch<GameEventAction>) => {
     dispatch(data);
     if (data.type === 'GAME_RESULT') {
       setTimeout(() => {

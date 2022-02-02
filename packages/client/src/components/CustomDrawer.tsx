@@ -6,6 +6,7 @@ import { Toolbar, IconButton } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandablePlayerTable from './ExpandablePlayerTable';
 import playerService from '../services/players';
+import { DrawerProps } from '../../../../common/types';
 
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -34,12 +35,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const CustomDrawer = ({ open, toggleDrawer }) => {
-  const [players, setPlayers] = useState([]);
+const CustomDrawer = ({ open, toggleDrawer }: DrawerProps) => {
+  const [players, setPlayers] = useState<string[]>([]);
 
-  useEffect(async () => {
-    const fetchedPlayersObj = await playerService.getPlayers();
-    setPlayers(fetchedPlayersObj.players);
+  useEffect(() => {
+    playerService.getPlayers()
+    .then(fetchedPlayersObj => {
+      setPlayers(fetchedPlayersObj.players);
+    });
   }, [open]);
 
   return (

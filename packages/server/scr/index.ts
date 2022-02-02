@@ -3,7 +3,7 @@ import playerRouter from './routes/players';
 
 const app = express();
 
-app.use(express.static(`${__dirname}/../../client/build`));
+app.use(express.static(`${__dirname}/../../../packages/client/build`));
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;

@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { PlayerGames } from '../types';
+import { PlayerGames } from '../../../../common/types';
 import * as config from '../utils/config';
 
 const client: MongoClient = new MongoClient(config.MONGODB_URI);

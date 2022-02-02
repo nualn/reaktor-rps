@@ -1,4 +1,4 @@
-import { PlayerList } from "../types";
+import { PlayerList } from "../../../../common/types";
 import { fetchGamesFromTo, fetchJSON } from "../utils/fetchTools";
 import * as config from '../utils/config';
 import { gameHistoryFormatter, getStats, sortGamesByPlayer } from "../utils/formatTools";

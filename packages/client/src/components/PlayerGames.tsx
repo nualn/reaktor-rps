@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import playerService from '../services/players';
+import { PlayerGamesTableFormat, Stats } from '../../../../common/types';
 
 const gameColumns = [
   {
@@ -48,7 +49,7 @@ const gameColumns = [
   },
 ];
 
-const StatsTable = ({ stats }) => {
+const StatsTable = ({ stats }: { stats: Stats }) => {
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -76,31 +77,37 @@ const StatsTable = ({ stats }) => {
 
 
 
-export default function DataGridDemo({ name }) {
-  const [playerGames, setPlayerGames] = useState({});
+export default function DataGridDemo({ name }: { name: string }) {
+  const [playerGames, setPlayerGames] = useState<PlayerGamesTableFormat>();
 
-  useEffect(async () => {
-    const newPlayerGames = await playerService.getPlayerGames(name);
-    newPlayerGames.games = newPlayerGames.games.map(game => {
-      return {
-        id: game.gameId,
-        outcome: game.outcome,
-        playerName: game.player.name,
-        playerPlayed: game.player.played,
-        opponentName: game.opponent.name,
-        opponentPlayed: game.opponent.played,
-        date: new Date(game.t)
-      };
-    });
-    setPlayerGames(newPlayerGames);
+  useEffect(() => {
+    playerService.getPlayerGames(name).then(newPlayerGames => {
+      const playerGamesTableFormatted = {
+        stats: newPlayerGames.stats, 
+        name: newPlayerGames.name,
+        games: newPlayerGames.games.map(game => {
+          return {
+            id: game.gameId,
+            outcome: game.outcome,
+            playerName: game.player.name,
+            playerPlayed: game.player.played,
+            opponentName: game.opponent.name,
+            opponentPlayed: game.opponent.played,
+            date: new Date(game.t)
+          };
+        })
+      }
+      setPlayerGames(playerGamesTableFormatted);
+    })
+    
   }, []);
 
   return (
     <>
-      <StatsTable stats={playerGames.stats}/>
+      <StatsTable stats={(playerGames as PlayerGamesTableFormat).stats}/>
       <div style={{ height: 500, width: '100%' }}>
         <DataGrid
-          rows={playerGames.games}
+          rows={(playerGames as PlayerGamesTableFormat).games}
           columns={gameColumns}
           pageSize={100}
           rowsPerPageOptions={[100]}

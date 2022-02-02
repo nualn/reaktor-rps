@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import PlayerGames from './PlayerGames';
+import { PlayerList } from '../../../../common/types';
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +24,12 @@ const useStyles = makeStyles({
   }
 });
 
-const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
+type Props = {
+  children: React.ReactNode;
+  expandComponent: React.ReactNode;
+};
+
+const ExpandableTableRow = ({ children, expandComponent, ...otherProps }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -45,7 +51,7 @@ const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
   );
 };
 
-export default function SimpleTable({ players }) {
+export default function SimpleTable({ players }: PlayerList) {
   const classes = useStyles();
 
   return (
@@ -61,7 +67,7 @@ export default function SimpleTable({ players }) {
             <ExpandableTableRow
               key={name}
               expandComponent={
-                <TableCell colSpan="5">
+                <TableCell colSpan={5}>
                   <PlayerGames name={name}/>
                 </TableCell>
               }

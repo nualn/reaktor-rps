@@ -1,4 +1,4 @@
-import { FormattedGameResult, GameResult, Hand, IntermediateStats, Outcome, PlayerGames } from "../types";
+import { FormattedGameResult, GameResult, Hand, IntermediateStats, Outcome, PlayerGames, Stats } from "../../../../common/types";
 
 const outcomes: Record<Hand, Record<Hand, Outcome>> = {
   ROCK: {
@@ -61,7 +61,7 @@ const sortGamesByPlayer = (gamesArray: Array<FormattedGameResult>, initialSorted
   return copyOfInitialArray;
 };
 
-const findMostPlayed = (intermediateStats: IntermediateStats) => {
+const findMostPlayed = (intermediateStats: IntermediateStats): Hand | null => {
   if (intermediateStats.rockPlayed >= intermediateStats.paperPlayed && intermediateStats.rockPlayed >= intermediateStats.scissorsPlayed) {
     return 'ROCK';
   }
@@ -71,10 +71,10 @@ const findMostPlayed = (intermediateStats: IntermediateStats) => {
   if (intermediateStats.scissorsPlayed > intermediateStats.rockPlayed && intermediateStats.scissorsPlayed > intermediateStats.paperPlayed) {
     return 'SCISSORS';
   }
-  return '';
+  return null;
 };
 
-const getStats = (formattedGamesList: Array<FormattedGameResult>) => {
+const getStats = (formattedGamesList: Array<FormattedGameResult>): Stats => {
   const intermediateStats: IntermediateStats = {
     wins: 0,
     totalMatches: 0,

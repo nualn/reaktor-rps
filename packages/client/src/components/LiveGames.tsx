@@ -3,22 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { gameEvent } from '../reducers/gameReducer';
 
 import { rpsIcon } from '../utils/liveGameUtils';
-import { Card, Grid, Container, Typography, CardContent } from '@mui/material';
+import { Paper, Grid, Container, Typography } from '@mui/material';
 import Zoom from '@mui/material/Zoom';
+import { RootState } from '../store';
+import { GameEvent, GameResult } from '../../../../common/types';
 
-const Game = ({ game }) => {
+const Game = ({ game }: { game: GameEvent }) => {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Zoom in>
-        <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <CardContent align='center'>
-            <Typography>{game.playerA.name}</Typography>
-            {rpsIcon(game.playerA.played)}
-            <Typography>vs.</Typography>
-            {rpsIcon(game.playerB.played)}
-            <Typography>{game.playerB.name}</Typography>
-          </CardContent>
-        </Card>
+        <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column', align: 'center'}}>
+          <Typography>{game.playerA.name}</Typography>
+          {rpsIcon(Object.prototype.hasOwnProperty.call(game.playerA, 'played') ? (game as GameResult).playerA.played : null)}
+          <Typography>vs.</Typography>
+          {rpsIcon(Object.prototype.hasOwnProperty.call(game.playerB, 'played') ? (game as GameResult).playerB.played : null)}
+          <Typography>{game.playerB.name}</Typography>
+        </Paper>
       </Zoom>
     </Grid>
   );
@@ -36,7 +36,7 @@ const LiveGames = () => {
     };
   }, []);
 
-  const games = useSelector(state => state);
+  const games = useSelector((state: RootState)=> state);
 
   return (
     <Container sx={{ py: 8, overflow: 'auto' }} maxWidth="md">
